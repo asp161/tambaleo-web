@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tambaleo: la torre diaria</title>
+<meta name="description" content="Cada día, los mismos 12 trastos absurdos para todo el mundo. Apílalos sin que se caiga la torre. Sin anuncios.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tambaleo: la torre diaria">
+<meta property="og:description" content="Cada día, 12 trastos absurdos. ¿Cuánto aguanta tu torre?">
+<meta property="og:image" content="https://asp161.github.io/tambaleo-web/og.png">
+<meta property="og:url" content="https://asp161.github.io/tambaleo-web/">
+<meta name="theme-color" content="#8ed1fc">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<main>
+  <img class="icon" src="icon-192.png" alt="" width="96" height="96">
+  <h1>TAMBALEO</h1>
+  <p class="tagline" data-t="tagline">La torre diaria: 12 trastos absurdos, una mesa y dos minutos.</p>
+  <section class="card">
+    <p class="kicker" id="kicker"></p>
+    <p class="height" id="height" hidden></p>
+    <p class="title" id="title" hidden></p>
+    <p class="ask" id="ask"></p>
+  </section>
+  <div class="buttons" id="buttons">
+    <a class="btn" id="play" data-t="play">Descárgalo en Google Play</a>
+    <a class="btn secondary" id="ios" data-t="ios">Descárgalo en el App Store</a>
+  </div>
+  <img class="shot" src="torre.png" alt="" data-t-alt="shot">
+  <ul class="points">
+    <li data-t="p1">🏗️ Un reto al día, igual para todo el mundo</li>
+    <li data-t="p2">📏 Compara tu torre con la de tus amigos</li>
+    <li data-t="p3">🚫 Sin anuncios. Nunca.</li>
+  </ul>
+</main>
+<footer>
+  <a href="soporte.html" data-t="help">Ayuda</a> ·
+  <a href="privacidad.html" data-t="privacy">Privacidad</a> ·
+  <a href="terminos.html" data-t="terms">Términos</a> ·
+  <a href="aviso-legal.html" data-t="legal">Aviso legal</a>
+</footer>
+<script>
+// Generado por tools/build_web.py con los datos de game/core/config.gd y daily.gd.
+const PLAY_URL = "https://play.google.com/store/apps/details?id=com.asp161.tambaleo";
+const APP_STORE_URL = "";
+const LAUNCH = [2026, 10, 10];
+// Mismos rangos y títulos que ShareText.TITLES en el juego.
+const TITLES = [
+  [0, "Ni torre ni ná", "Barely a pile"], [60, "Montoncito", "Little heap"],
+  [150, "Torre de la abuela", "Grandma's tower"], [300, "Obra sin licencia", "Unlicensed build"],
+  [450, "Rascacielos de saldo", "Bargain skyscraper"], [650, "Torre de Babel low cost", "Budget Tower of Babel"],
+  [900, "Leyenda del tambaleo", "Wobble legend"],
+];
+const TEXT = {
+  es: {
+    tagline: "La torre diaria: 12 trastos absurdos, una mesa y dos minutos.",
+    play: "Descárgalo en Google Play", ios: "Descárgalo en el App Store", iosSoon: "Pronto en iPhone",
+    p1: "🏗️ Un reto al día, igual para todo el mundo", p2: "📏 Compara tu torre con la de tus amigos", p3: "🚫 Sin anuncios. Nunca.",
+    help: "Ayuda", privacy: "Privacidad", terms: "Términos", legal: "Aviso legal", shot: "Una torre de trastos sobre la mesa",
+    shared: n => `Alguien ha apilado en el reto #${n}`,
+    beat: n => n > 0 ? `¿Puedes superarlo? Hoy toca el reto #${n}, gratis.` : "¿Puedes superarlo?",
+    today: n => `Hoy toca el reto #${n}`,
+    intro: "Cada día, los mismos 12 trastos para todo el mundo. Apílalos sin que se caiga la torre y comparte tu altura.",
+    soon: "Muy pronto",
+  },
+  en: {
+    tagline: "The daily tower: 12 absurd things, one table and two minutes.",
+    play: "Get it on Google Play", ios: "Download on the App Store", iosSoon: "Coming soon to iPhone",
+    p1: "🏗️ One challenge a day, the same for everyone", p2: "📏 Compare towers with your friends", p3: "🚫 No ads. Ever.",
+    help: "Help", privacy: "Privacy", terms: "Terms", legal: "Legal notice", shot: "A tower of things on the table",
+    shared: n => `Someone stacked this in challenge #${n}`,
+    beat: n => n > 0 ? `Can you beat it? Today is challenge #${n}, free.` : "Can you beat it?",
+    today: n => `Today is challenge #${n}`,
+    intro: "Every day, the same 12 things for everyone. Stack them without toppling the tower and share your height.",
+    soon: "Coming soon",
+  },
+};
+const lang = (navigator.language || "es").toLowerCase().startsWith("es") ? "es" : "en";
+const t = TEXT[lang];
+document.documentElement.lang = lang;
+document.querySelectorAll("[data-t]").forEach(el => { el.textContent = t[el.dataset.t]; });
+document.querySelectorAll("[data-t-alt]").forEach(el => { el.alt = t[el.dataset.tAlt]; });
+
+// Número del reto de hoy, con la fecha local (como en el juego).
+const now = new Date();
+const today = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(LAUNCH[0], LAUNCH[1] - 1, LAUNCH[2])) / 86400000) + 1;
+const formatHeight = cm => `${Math.floor(cm / 100)}${lang === "es" ? "," : "."}${String(cm % 100).padStart(2, "0")} m`;
+const titleFor = cm => TITLES.filter(e => cm >= e[0]).pop()[lang === "es" ? 1 : 2];
+
+// El enlace compartido trae el reto y la altura: ?r=12&m=437 (texto, nunca HTML).
+const query = new URLSearchParams(location.search);
+const r = parseInt(query.get("r"), 10), m = parseInt(query.get("m"), 10);
+const $ = id => document.getElementById(id);
+if (r >= 1 && r <= 100000 && m >= 0 && m <= 100000) {
+  $("kicker").textContent = t.shared(r);
+  $("height").textContent = formatHeight(m);
+  $("title").textContent = titleFor(m);
+  $("height").hidden = $("title").hidden = false;
+  $("ask").textContent = t.beat(today);
+} else if (today >= 1) {
+  $("kicker").textContent = t.today(today);
+  $("ask").textContent = t.intro;
+} else {
+  $("kicker").textContent = t.soon;
+  $("ask").textContent = t.intro;
+}
+
+// Botones de las tiendas: primero el del móvil que se usa.
+const play = $("play"), ios = $("ios");
+if (PLAY_URL) play.href = PLAY_URL; else play.remove();
+if (APP_STORE_URL) ios.href = APP_STORE_URL; else { ios.textContent = t.iosSoon; ios.classList.add("off"); }
+if (/iphone|ipad|ipod/i.test(navigator.userAgent) && APP_STORE_URL) {
+  ios.className = "btn"; play.className = "btn secondary"; $("buttons").prepend(ios);
+}
+</script>
+</body>
+</html>

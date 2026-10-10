@@ -1,0 +1,54 @@
+/* Web de Tambaleo: mismos colores y letras que el juego. */
+@font-face { font-family: Lilita; src: url(fonts/LilitaOne.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: Nunito; src: url(fonts/Nunito-ExtraBold.woff2) format("woff2"); font-weight: 800; font-display: swap; }
+@font-face { font-family: Nunito; src: url(fonts/Nunito-Regular.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+
+:root {
+  --sky: #8ed1fc; --sky-deep: #3f74d6; --ink: #1e2147; --ink-soft: #4a4f7a;
+  --paper: #fff8ec; --tomato: #ff5a36; --tomato-dark: #c73a1d;
+  --mustard: #ffc845; --mustard-dark: #d69a12; --stone: #c9c3b8;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; color: var(--ink);
+  font: 800 18px/1.45 Nunito, system-ui, sans-serif;
+  background: linear-gradient(var(--sky), var(--sky-deep)) fixed;
+  display: flex; flex-direction: column; align-items: center;
+}
+main { width: 100%; max-width: 560px; padding: 32px 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.icon { width: 96px; height: 96px; border-radius: 22px; box-shadow: 0 10px 24px rgba(30, 33, 71, .3); }
+h1 {
+  margin: 0; font: 400 clamp(56px, 16vw, 84px)/1 Lilita, sans-serif; color: var(--paper);
+  -webkit-text-stroke: 10px var(--ink); paint-order: stroke fill; letter-spacing: 1px;
+}
+.tagline { margin: 0; font-size: 20px; }
+.card {
+  width: 100%; background: var(--paper); border-radius: 28px; padding: 24px 20px;
+  box-shadow: 0 10px 28px rgba(30, 33, 71, .22);
+}
+.kicker { margin: 0; color: var(--ink-soft); font-size: 15px; letter-spacing: .5px; text-transform: uppercase; }
+.height { margin: 4px 0 0; font: 400 72px/1.05 Lilita, sans-serif; }
+.title { margin: 2px 0 8px; font-size: 22px; }
+.ask { margin: 0; color: var(--ink-soft); }
+.buttons { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.btn {
+  display: block; padding: 16px 20px 20px; border-radius: 24px; text-decoration: none;
+  font: 400 24px/1.1 Lilita, sans-serif; color: var(--paper); background: var(--tomato);
+  border-bottom: 7px solid var(--tomato-dark);
+}
+.btn.secondary { color: var(--ink); background: var(--mustard); border-bottom-color: var(--mustard-dark); }
+.btn.off { color: var(--ink-soft); background: var(--paper); border-bottom-color: var(--stone); pointer-events: none; }
+.shot { width: min(300px, 80%); border-radius: 26px; box-shadow: 0 18px 40px rgba(30, 33, 71, .35); }
+.points { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+footer { padding: 24px 16px 32px; font-size: 15px; color: var(--ink); text-align: center; }
+footer a { color: var(--ink); }
+
+/* Textos legales */
+.doc main { text-align: left; align-items: stretch; }
+.doc .card { padding: 24px 22px; font-weight: 400; }
+.doc h1 { font-size: 34px; -webkit-text-stroke: 0; color: var(--ink); text-align: left; letter-spacing: 0; line-height: 1.15; }
+.doc h2 { font: 400 24px/1.2 Lilita, sans-serif; margin: 28px 0 6px; }
+.doc strong { font-weight: 800; }
+.doc a { color: var(--sky-deep); }
+.doc .back { font-weight: 800; color: var(--ink); text-decoration: none; }
